@@ -11,6 +11,7 @@ import {
   COACHING_LEVEL_KEY,
   DEVICE_BASELINE_KEY_PREFIX,
   DEVICE_OFFSET_KEY_PREFIX,
+  FEEDBACK_TOOLS_STORAGE_KEY,
   PB_KEY,
   SETUP_COMPLETE_KEY,
   SPEAK_COACH_CUES_KEY,
@@ -63,6 +64,19 @@ export function loadCoachEnabled(): boolean {
 export function saveCoachEnabled(value: boolean): void {
   if (typeof window === "undefined") return;
   window.localStorage.setItem(COACH_STORAGE_KEY, String(value));
+}
+
+// Feedback/diagnostics UI visibility (feedback FAB, rep rating, constraint
+// diagnostic strip). Default is false — these are opt-in, hidden until the
+// user turns them on from the welcome screen.
+export function loadFeedbackToolsEnabled(): boolean {
+  if (typeof window === "undefined") return false;
+  return window.localStorage.getItem(FEEDBACK_TOOLS_STORAGE_KEY) === "true";
+}
+
+export function saveFeedbackToolsEnabled(value: boolean): void {
+  if (typeof window === "undefined") return;
+  window.localStorage.setItem(FEEDBACK_TOOLS_STORAGE_KEY, String(value));
 }
 
 /** Clinician-selected Kokoro coach voice; default when /setup hasn't run. */
