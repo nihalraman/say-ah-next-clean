@@ -9,6 +9,8 @@ interface Props {
   onUserNameChange: (name: string) => void;
   coachEnabled: boolean;
   onCoachToggle: (value: boolean) => void;
+  feedbackToolsEnabled: boolean;
+  onFeedbackToolsToggle: (value: boolean) => void;
   onBegin: () => void;
   onShowHistory: () => void;
 }
@@ -18,6 +20,8 @@ export function WelcomeScreen({
   onUserNameChange,
   coachEnabled,
   onCoachToggle,
+  feedbackToolsEnabled,
+  onFeedbackToolsToggle,
   onBegin,
   onShowHistory,
 }: Props) {
@@ -92,6 +96,14 @@ export function WelcomeScreen({
           enabled={coachEnabled}
           onToggle={onCoachToggle}
           variant="full"
+        />
+        <CoachToggle
+          enabled={feedbackToolsEnabled}
+          onToggle={onFeedbackToolsToggle}
+          variant="full"
+          label="Feedback & diagnostics"
+          subtextOn="Shows a feedback button, round ratings, and connection info"
+          subtextOff="Hidden by default — turn on to help us improve the app"
         />
         <div className="button-group">
           <button className="btn-primary" onClick={onBegin}>

@@ -129,6 +129,7 @@ export const STORAGE_KEY = "sayah_sessions";
 export const PB_KEY = "sayah_personal_best";
 export const SPEAK_COACH_CUES_KEY = "sayah_speak_coach_cues";
 export const COACH_STORAGE_KEY = "sayah_coach_enabled";
+export const FEEDBACK_TOOLS_STORAGE_KEY = "sayah_feedback_tools_enabled";
 export const DEVICE_OFFSET_KEY_PREFIX = "sayah_offset_";
 
 // Clinician-setup settings (configured at /setup, stored per device)

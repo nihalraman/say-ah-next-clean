@@ -21,6 +21,8 @@ import {
   loadCoachVoice,
   loadCoachingLevel,
   loadDeviceOffset,
+  loadFeedbackToolsEnabled,
+  saveFeedbackToolsEnabled,
 } from "@/lib/storage";
 import { ConstraintDiagnostic } from "@/components/ConstraintDiagnostic";
 import { WelcomeScreen } from "@/components/screens/WelcomeScreen";
@@ -38,6 +40,7 @@ export default function Page() {
   const [repResult, setRepResult] = useState<RepResult | null>(null);
   const [summaryMessage, setSummaryMessage] = useState("");
   const [coachEnabled, setCoachEnabled] = useState(true);
+  const [feedbackToolsEnabled, setFeedbackToolsEnabled] = useState(false);
 
   const analyser = useAudioAnalyser({ coachEnabled });
   const session = useSession(TOTAL_REPS, analyser.deviceId);
@@ -59,6 +62,7 @@ export default function Page() {
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setCoachEnabled(loadCoachEnabled());
+    setFeedbackToolsEnabled(loadFeedbackToolsEnabled());
     primeVoices();
     coachVoice.setVoice(loadCoachVoice());
     // Start loading the Kokoro model early (in the worker) when the coach is
@@ -71,6 +75,11 @@ export default function Page() {
   const handleCoachToggle = useCallback((value: boolean) => {
     setCoachEnabled(value);
     saveCoachEnabled(value);
+  }, []);
+
+  const handleFeedbackToolsToggle = useCallback((value: boolean) => {
+    setFeedbackToolsEnabled(value);
+    saveFeedbackToolsEnabled(value);
   }, []);
 
   // ── Handlers ─────────────────────────────────────────────────────────────
@@ -160,6 +169,8 @@ export default function Page() {
           onUserNameChange={session.setUserName}
           coachEnabled={coachEnabled}
           onCoachToggle={handleCoachToggle}
+          feedbackToolsEnabled={feedbackToolsEnabled}
+          onFeedbackToolsToggle={handleFeedbackToolsToggle}
           onBegin={handleBegin}
           onShowHistory={handleShowHistory}
         />
@@ -195,6 +206,7 @@ export default function Page() {
           floorDb={session.floorDb}
           coachEnabled={coachEnabled}
           onCoachToggle={handleCoachToggle}
+          feedbackToolsEnabled={feedbackToolsEnabled}
           onNext={handleNextRep}
           onSeeResults={handleSeeResults}
           onDiscardRecording={handleDiscardRecording}
@@ -215,15 +227,16 @@ export default function Page() {
           onBack={handleBackToWelcome}
         />
       )}
-      {(screen === "pre-rep" ||
-        screen === "exercise" ||
-        screen === "rep-result") && (
-        <ConstraintDiagnostic
-          status={analyser.constraintStatus}
-          deviceId={analyser.deviceId}
-        />
-      )}
-      <FeedbackModal currentScreen={screen} />
+      {feedbackToolsEnabled &&
+        (screen === "pre-rep" ||
+          screen === "exercise" ||
+          screen === "rep-result") && (
+          <ConstraintDiagnostic
+            status={analyser.constraintStatus}
+            deviceId={analyser.deviceId}
+          />
+        )}
+      {feedbackToolsEnabled && <FeedbackModal currentScreen={screen} />}
     </div>
   );
 }

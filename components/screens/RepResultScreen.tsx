@@ -16,6 +16,7 @@ interface Props {
   floorDb: number;
   coachEnabled: boolean;
   onCoachToggle: (value: boolean) => void;
+  feedbackToolsEnabled: boolean;
   onNext: () => void;
   onSeeResults: () => void;
   onDiscardRecording: () => void;
@@ -27,6 +28,7 @@ export function RepResultScreen({
   floorDb,
   coachEnabled,
   onCoachToggle,
+  feedbackToolsEnabled,
   onNext,
   onSeeResults,
   onDiscardRecording,
@@ -141,11 +143,13 @@ export function RepResultScreen({
 
         <FinalStripChart buffer={result.stripBuffer} floorDb={floorDb} />
         <div className="result-message">{result.feedback.display}</div>
-        <RepRating
-          repNumber={result.repNumber}
-          category={result.category}
-          duration={result.duration}
-        />
+        {feedbackToolsEnabled && (
+          <RepRating
+            repNumber={result.repNumber}
+            category={result.category}
+            duration={result.duration}
+          />
+        )}
         <CoachToggle enabled={coachEnabled} onToggle={onCoachToggle} />
         <button
           className="btn-primary"
